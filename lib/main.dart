@@ -30,7 +30,7 @@ class BallPage extends StatefulWidget {
 class _BallPageState extends State<BallPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _animation;
-  Offset _position = Offset(100, 100); // 初始位置
+  Offset _position = const Offset(100, 100); // 初始位置
   final double _speed = 200.0; // 每秒移动的像素数
 
   @override
@@ -38,7 +38,7 @@ class _BallPageState extends State<BallPage> with SingleTickerProviderStateMixin
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500), // 初始持续时间
+      duration: const Duration(milliseconds: 500), // 初始持续时间
     );
 
     _animation = Tween<Offset>(
@@ -86,14 +86,28 @@ class _BallPageState extends State<BallPage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shadow World'),
+        title: const Text('Shadow World'),
       ),
-      body: GestureDetector(
-        onTapUp: _moveBall,
-        child: CustomPaint(
-          painter: BallPainter(_animation.value),
-          child: Container(),
-        ),
+      body: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/image/background.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTapUp: _moveBall,
+            child: CustomPaint(
+              painter: BallPainter(_animation.value),
+              child: Container(),
+            ),
+          ),
+        ],
       ),
     );
   }

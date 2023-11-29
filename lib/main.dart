@@ -215,11 +215,21 @@ class RolePainter extends CustomPainter {
     var legsLength = 15.0;
     var legLeftStart = bodyEnd;
     var legRightStart = bodyEnd;
-    var legMovement = (progress * 20 - 10).abs(); // 加快腿部动画速度
-    var legLeftEnd = legLeftStart.translate(legMovement, legsLength);
-    var legRightEnd = legRightStart.translate(-legMovement, legsLength);
-    canvas.drawLine(legLeftStart, legLeftEnd, paint);
-    canvas.drawLine(legRightStart, legRightEnd, paint);
+    var legMovement = sin(progress * 2 * pi) * 10; // 大腿左右移动的幅度
+
+    // 大腿的动态位置
+    var kneeLeft = legLeftStart.translate(legMovement, 0);
+    var kneeRight = legRightStart.translate(-legMovement, 0);
+
+    // 小腿保持竖直
+    var legLeftEnd = kneeLeft.translate(0, legsLength);
+    var legRightEnd = kneeRight.translate(0, legsLength);
+
+    // 绘制腿部
+    canvas.drawLine(legLeftStart, kneeLeft, paint); // 左大腿
+    canvas.drawLine(kneeLeft, legLeftEnd, paint); // 左小腿
+    canvas.drawLine(legRightStart, kneeRight, paint); // 右大腿
+    canvas.drawLine(kneeRight, legRightEnd, paint); // 右小腿
   }
 
   @override
